@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTA Platform Dashboard</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      </head>
+<body class="bg-[#f4f6fa] min-h-screen">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#222f3e] text-white flex flex-col py-8 px-4">
+      <div class="flex flex-col items-center mb-10">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QBJoT_Xc5EWAxooAuSO51Ddrm9J_tMro-A&s" alt="Logo" class="h-10 w-auto mb-2" />
+        <span class="font-bold text-lg tracking-wide">PAPIS</span>
+      </div>
+      <nav class="flex-1 space-y-2">
+        <a href="#" class="flex items-center px-4 py-3 rounded-lg bg-[#394867] font-semibold">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
+          Dashboard
+        </a>
+        <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Uploads
+        </a>
+        <a href="history.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"/></svg>
+          History
+        </a>
+        <a href="users.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.797.755 6.879 2.047M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Users
+        </a>
+      </nav>
+      <div class="mt-auto pt-8">
+        <!-- Logout button removed from sidebar -->
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col">
+      <!-- Top Navbar -->
+      <header class="flex items-center justify-between bg-white px-8 py-4 shadow-sm">
+        <h1 class="text-2xl font-bold text-[#1a237e]">Dashboard</h1>
+        <div class="flex items-center space-x-4">
+          <span class="font-semibold text-[#394867]">Admin</span>
+          <img src="https://ui-avatars.com/api/?name=Admin&background=394867&color=fff" alt="User Avatar" class="h-10 w-10 rounded-full border-2 border-[#394867]" />
+          <button class="flex items-center px-3 py-2 bg-[#394867] text-white rounded-lg hover:bg-[#1a1333] transition font-semibold text-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/></svg>
+            Logout
+          </button>
+        </div>
+      </header>
+              <!-- Content Area -->
+        <section class="flex-1 p-8 overflow-auto">
+          <!-- Firmware Uploads Table Section -->
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-semibold text-[#394867]">Firmware Uploads</h2>
+              <button onclick="window.location.href='upload.html'" class="flex items-center px-5 py-2 bg-[#394867] text-white rounded-lg font-semibold shadow hover:bg-[#222f3e] transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                Upload New
+              </button>
+            </div>
+            <!-- Table -->
+            <div class="bg-white rounded-xl shadow p-6 overflow-x-auto">
+              <table class="min-w-full text-left">
+                <thead>
+                  <tr class="text-[#394867] font-bold border-b">
+                    <th class="py-3 px-4">Train no.</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4">Firmware 1</th>
+                    <th class="py-3 px-4">Firmware 2</th>
+                    <th class="py-3 px-4">Last time update</th>
+                    <th class="py-3 px-4">Comment</th>
+                  </tr>
+                </thead>
+                <tbody class="text-[#394867]">
+                  <tr class="border-b hover:bg-[#f4f6fa]">
+                    <td class="py-3 px-4 font-semibold">12345</td>
+                    <td class="py-3 px-4"><span class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Active</span></td>
+                    <td class="py-3 px-4">v1.2.3</td>
+                    <td class="py-3 px-4">v2.0.1</td>
+                    <td class="py-3 px-4">2024-07-29 14:30</td>
+                    <td class="py-3 px-4">Updated successfully</td>
+                  </tr>
+                  <tr class="border-b hover:bg-[#f4f6fa]">
+                    <td class="py-3 px-4 font-semibold">67890</td>
+                    <td class="py-3 px-4"><span class="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">Pending</span></td>
+                    <td class="py-3 px-4">v1.1.0</td>
+                    <td class="py-3 px-4">v1.9.5</td>
+                    <td class="py-3 px-4">2024-07-28 09:15</td>
+                    <td class="py-3 px-4">Update in progress</td>
+                  </tr>
+                  <!-- More rows as needed -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">Total Uploads</p>
+                  <p class="text-2xl font-semibold text-gray-900" id="totalUploads">0</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">Active Users</p>
+                  <p class="text-2xl font-semibold text-gray-900" id="activeUsers">0</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">Active Firmware</p>
+                  <p class="text-2xl font-semibold text-gray-900" id="activeFirmware">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Section -->
+          <div class="grid grid-cols-1 gap-8 mb-8">
+            <!-- Upload Activity Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Upload Activity (Last 7 Days)</h3>
+              <canvas id="uploadChart" width="400" height="200"></canvas>
+            </div>
+          </div>
+
+
+        </section>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3002/api';
+    let uploadChart;
+
+    // Check if user is logged in
+    function checkAuth() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      if (!isLoggedIn) {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      window.location.href = 'index.html';
+    }
+
+    // Initialize charts
+    function initializeCharts() {
+      // Upload Activity Chart
+      const uploadCtx = document.getElementById('uploadChart').getContext('2d');
+      uploadChart = new Chart(uploadCtx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Uploads',
+            data: [3, 5, 2, 8, 4, 6, 3],
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Load dashboard stats
+    async function loadDashboardStats() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
+        if (response.ok) {
+          const stats = await response.json();
+          document.getElementById('totalUploads').textContent = stats.totalUploads || 0;
+          document.getElementById('activeUsers').textContent = stats.totalUsers || 0;
+          document.getElementById('activeFirmware').textContent = stats.activeUploads || 0;
+        }
+      } catch (error) {
+        console.log('Error loading stats:', error);
+        // Use fallback data
+        document.getElementById('totalUploads').textContent = '12';
+        document.getElementById('activeUsers').textContent = '5';
+        document.getElementById('activeFirmware').textContent = '8';
+      }
+    }
+
+
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAuth();
+      initializeCharts();
+      loadDashboardStats();
+      
+      const logoutButton = document.querySelector('button');
+      if (logoutButton && logoutButton.textContent.includes('Logout')) {
+        logoutButton.addEventListener('click', logout);
+      }
+    });
+  </script>
+</body>
+</html> 

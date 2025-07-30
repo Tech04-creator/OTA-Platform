@@ -1,0 +1,15 @@
+This is a test firmware file for the OTA Platform.
+
+Train Number: TEST001
+Firmware Version: v1.0.0
+Description: Test upload functionality
+
+This file contains test data to verify that the upload system works correctly with .txt files.
+
+Features to test:
+- File upload validation
+- Backend processing
+- History display
+- Download functionality
+
+End of test file. 

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload History - OTA Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#f4f6fa] min-h-screen">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#222f3e] text-white flex flex-col py-8 px-4">
+      <div class="flex flex-col items-center mb-10">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QBJoT_Xc5EWAxooAuSO51Ddrm9J_tMro-A&s" alt="Logo" class="h-10 w-auto mb-2" />
+        <span class="font-bold text-lg tracking-wide">PAPIS</span>
+      </div>
+      <nav class="flex-1 space-y-2">
+        <a href="dashboard.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
+          Dashboard
+        </a>
+        <a href="upload.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Uploads
+        </a>
+        <a href="history.html" class="flex items-center px-4 py-3 rounded-lg bg-[#394867] font-semibold">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"/></svg>
+          History
+        </a>
+        <a href="users.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.797.755 6.879 2.047M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Users
+        </a>
+      </nav>
+      <div class="mt-auto pt-8">
+        <!-- Logout button removed from sidebar -->
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col">
+      <!-- Top Navbar -->
+      <header class="flex items-center justify-between bg-white px-8 py-4 shadow-sm">
+        <h1 class="text-2xl font-bold text-[#1a237e]">Upload History</h1>
+        <div class="flex items-center space-x-4">
+          <span class="font-semibold text-[#394867]">Admin</span>
+          <img src="https://ui-avatars.com/api/?name=Admin&background=394867&color=fff" alt="User Avatar" class="h-10 w-10 rounded-full border-2 border-[#394867]" />
+          <button onclick="logout()" class="flex items-center px-3 py-2 bg-[#394867] text-white rounded-lg hover:bg-[#1a1333] transition font-semibold text-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/></svg>
+            Logout
+          </button>
+        </div>
+      </header>
+      <!-- Content Area -->
+      <section class="flex-1 p-8 overflow-auto">
+        <!-- Filters and Search -->
+        <div class="bg-white rounded-xl shadow p-6 mb-6">
+          <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex flex-col md:flex-row gap-4 flex-1">
+              <!-- Search -->
+              <div class="relative">
+                <input type="text" id="searchInput" placeholder="Search by train number or firmware version..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#394867] focus:border-[#394867] w-full md:w-80" />
+                <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              
+              <!-- Status Filter -->
+              <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#394867] focus:border-[#394867]" aria-label="Filter by status">
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+              </select>
+              
+              <!-- Date Filter -->
+              <input type="date" id="dateFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#394867] focus:border-[#394867]" aria-label="Filter by date" />
+            </div>
+            
+            <!-- Refresh Button -->
+            <button onclick="loadHistoryData()" class="px-4 py-2 bg-[#394867] text-white rounded-lg hover:bg-[#222f3e] transition font-semibold">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Upload History</h2>
+          </div>
+          
+          <!-- Loading State -->
+          <div id="loadingState" class="hidden p-8 text-center">
+            <svg class="animate-spin h-8 w-8 text-[#394867] mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="text-gray-600">Loading upload history...</p>
+          </div>
+
+          <!-- Table -->
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Train Number</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Firmware Version</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Upload Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File Size</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded By</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="historyTableBody" class="bg-white divide-y divide-gray-200">
+                <!-- Data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <button onclick="previousPage()" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                Previous
+              </button>
+              <button onclick="nextPage()" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                Next
+              </button>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing <span id="startIndex">1</span> to <span id="endIndex">10</span> of <span id="totalItems">0</span> results
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <button onclick="previousPage()" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Previous</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <div id="pageNumbers" class="flex">
+                    <!-- Page numbers will be generated here -->
+                  </div>
+                  <button onclick="nextPage()" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Next</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3002/api';
+    let allUploads = [];
+    let filteredUploads = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Check authentication on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAuth();
+      loadHistoryData();
+      setupFilters();
+    });
+
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!token) {
+        // Fallback to simple auth for now
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+          window.location.href = 'index.html';
+          return;
+        }
+      }
+    }
+
+    function setupFilters() {
+      // Search functionality
+      document.getElementById('searchInput').addEventListener('input', function() {
+        filterData();
+      });
+
+      // Status filter
+      document.getElementById('statusFilter').addEventListener('change', function() {
+        filterData();
+      });
+
+      // Date filter
+      document.getElementById('dateFilter').addEventListener('change', function() {
+        filterData();
+      });
+    }
+
+    async function loadHistoryData() {
+      const loadingState = document.getElementById('loadingState');
+      const tableBody = document.getElementById('historyTableBody');
+      
+      loadingState.classList.remove('hidden');
+      tableBody.innerHTML = '';
+
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {};
+        
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/firmware`, {
+          headers: headers
+        });
+
+        if (response.ok) {
+          allUploads = await response.json();
+          filteredUploads = [...allUploads];
+          currentPage = 1;
+          displayData();
+        } else {
+          showError('Failed to load upload history');
+        }
+      } catch (error) {
+        console.error('Error loading history:', error);
+        showError('Network error. Please check your connection.');
+      } finally {
+        loadingState.classList.add('hidden');
+      }
+    }
+
+    function filterData() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const dateFilter = document.getElementById('dateFilter').value;
+
+      filteredUploads = allUploads.filter(upload => {
+        const matchesSearch = !searchTerm || 
+          upload.train_number.toLowerCase().includes(searchTerm) ||
+          upload.firmware_version.toLowerCase().includes(searchTerm) ||
+          upload.file_name.toLowerCase().includes(searchTerm);
+
+        const matchesStatus = !statusFilter || upload.status === statusFilter;
+
+        const matchesDate = !dateFilter || 
+          new Date(upload.created_at).toISOString().split('T')[0] === dateFilter;
+
+        return matchesSearch && matchesStatus && matchesDate;
+      });
+
+      currentPage = 1;
+      displayData();
+    }
+
+    function displayData() {
+      const tableBody = document.getElementById('historyTableBody');
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const pageData = filteredUploads.slice(startIndex, endIndex);
+
+      // Update pagination info
+      document.getElementById('startIndex').textContent = startIndex + 1;
+      document.getElementById('endIndex').textContent = Math.min(endIndex, filteredUploads.length);
+      document.getElementById('totalItems').textContent = filteredUploads.length;
+
+      if (pageData.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+              No uploads found
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = pageData.map(upload => {
+        const statusClass = upload.status === 'Active' ? 'bg-green-100 text-green-800' : 
+                          upload.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-red-100 text-red-800';
+
+        const fileSize = upload.file_size ? `${(upload.file_size / 1024 / 1024).toFixed(2)} MB` : 'N/A';
+        const uploadDate = new Date(upload.created_at).toLocaleDateString();
+        const uploadedBy = upload.uploaded_by_name || 'Unknown';
+
+        return `
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              ${upload.train_number}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              ${upload.firmware_version}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${uploadDate}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                ${upload.status}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${fileSize}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${uploadedBy}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button onclick="downloadFile(${upload.id})" class="text-[#394867] hover:text-[#222f3e] mr-3">
+                <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download
+              </button>
+              <button onclick="deleteUpload(${upload.id})" class="text-red-600 hover:text-red-900">
+                <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      updatePagination();
+    }
+
+    function updatePagination() {
+      const totalPages = Math.ceil(filteredUploads.length / itemsPerPage);
+      const pageNumbers = document.getElementById('pageNumbers');
+      
+      pageNumbers.innerHTML = '';
+      
+      for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.className = `relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+          i === currentPage 
+            ? 'z-10 bg-[#394867] border-[#394867] text-white' 
+            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+        }`;
+        button.textContent = i;
+        button.onclick = () => goToPage(i);
+        pageNumbers.appendChild(button);
+      }
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      displayData();
+    }
+
+    function previousPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        displayData();
+      }
+    }
+
+    function nextPage() {
+      const totalPages = Math.ceil(filteredUploads.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        displayData();
+      }
+    }
+
+    async function downloadFile(uploadId) {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {};
+        
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/firmware/${uploadId}/download`, {
+          headers: headers
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'firmware.bin';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        } else {
+          showError('Failed to download file');
+        }
+      } catch (error) {
+        console.error('Download error:', error);
+        showError('Failed to download file');
+      }
+    }
+
+    async function deleteUpload(uploadId) {
+      if (!confirm('Are you sure you want to delete this upload?')) {
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {};
+        
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/firmware/${uploadId}`, {
+          method: 'DELETE',
+          headers: headers
+        });
+
+        if (response.ok) {
+          // Remove from local arrays
+          allUploads = allUploads.filter(upload => upload.id !== uploadId);
+          filteredUploads = filteredUploads.filter(upload => upload.id !== uploadId);
+          displayData();
+          showSuccess('Upload deleted successfully');
+        } else {
+          showError('Failed to delete upload');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        showError('Failed to delete upload');
+      }
+    }
+
+    function showSuccess(message) {
+      // You can implement a toast notification here
+      console.log('Success:', message);
+    }
+
+    function showError(message) {
+      // You can implement a toast notification here
+      console.error('Error:', message);
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html> 

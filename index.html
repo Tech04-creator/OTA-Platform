@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTA Platform Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1333] via-[#2d1a5a] to-[#394867]">
+  <div class="w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-8 sm:p-10 border border-gray-100">
+    <div class="flex justify-center mb-8">
+      <img src="https://i.imgur.com/1Q9Z1Zm.png" alt="MassTrans Logo" class="h-10 w-auto drop-shadow" />
+    </div>
+    <h2 class="text-3xl font-extrabold text-[#1a237e] mb-8 text-center">Welcome to OTA Platform!</h2>
+    <form id="loginForm" class="space-y-6">
+      <div>
+        <label class="block text-[#1a237e] font-semibold mb-2">Email ID</label>
+        <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#394867] bg-gray-50 transition placeholder-gray-400" placeholder="Enter your email" required />
+      </div>
+      <div>
+        <label class="block text-[#1a237e] font-semibold mb-2">Password</label>
+        <div class="relative">
+          <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#394867] bg-gray-50 transition placeholder-gray-400" placeholder="Enter your password" required />
+          <span class="absolute right-3 top-3 cursor-pointer" onclick="togglePassword()">
+            <!-- Eye icon (for show/hide password) -->
+            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <button type="submit" class="w-full py-3 mt-4 bg-gradient-to-r from-[#394867] to-[#222f3e] text-white font-bold rounded-xl shadow-lg hover:scale-105 hover:from-[#222f3e] hover:to-[#394867] transition-all duration-200">Sign in</button>
+      <div id="errorMessage" class="text-red-600 text-center text-sm hidden"></div>
+    </form>
+  </div>
+
+  <script>
+    // Toggle password visibility
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.5 12s3.75 6.75 9.75 6.75c1.563 0 3.05-.282 4.396-.792M21 21l-5.197-5.197M9.75 9.75a3.75 3.75 0 015.197 5.197" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 12a3.75 3.75 0 01-7.5 0" />
+        `;
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        `;
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      
+      // Basic validation
+      if (!email || !password) {
+        showError('Please fill in all fields');
+        return;
+      }
+      
+      if (!isValidEmail(email)) {
+        showError('Please enter a valid email address');
+        return;
+      }
+      
+      // Simple authentication (replace with real backend logic)
+      if (email === 'admin@example.com' && password === 'admin') {
+        // Store login state (optional)
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', email);
+        
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+      } else {
+        showError('Invalid email or password');
+      }
+    });
+
+    function showError(message) {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = message;
+      errorMessage.classList.remove('hidden');
+      
+      // Hide error after 3 seconds
+      setTimeout(() => {
+        errorMessage.classList.add('hidden');
+      }, 3000);
+    }
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+  </script>
+</body>
+</html> 

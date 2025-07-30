@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Firmware - OTA Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#f4f6fa] min-h-screen">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#222f3e] text-white flex flex-col py-8 px-4">
+      <div class="flex flex-col items-center mb-10">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-QBJoT_Xc5EWAxooAuSO51Ddrm9J_tMro-A&s" alt="Logo" class="h-10 w-auto mb-2" />
+        <span class="font-bold text-lg tracking-wide">PAPIS</span>
+      </div>
+      <nav class="flex-1 space-y-2">
+        <a href="dashboard.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
+          Dashboard
+        </a>
+        <a href="#" class="flex items-center px-4 py-3 rounded-lg bg-[#394867] font-semibold">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Uploads
+        </a>
+        <a href="history.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"/></svg>
+          History
+        </a>
+        <a href="users.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-[#394867] transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.797.755 6.879 2.047M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Users
+        </a>
+      </nav>
+      <div class="mt-auto pt-8">
+        <!-- Logout button removed from sidebar -->
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col">
+      <!-- Top Navbar -->
+      <header class="flex items-center justify-between bg-white px-8 py-4 shadow-sm">
+        <h1 class="text-2xl font-bold text-[#1a237e]">Upload Firmware</h1>
+        <div class="flex items-center space-x-4">
+          <span class="font-semibold text-[#394867]">Admin</span>
+          <img src="https://ui-avatars.com/api/?name=Admin&background=394867&color=fff" alt="User Avatar" class="h-10 w-10 rounded-full border-2 border-[#394867]" />
+          <button onclick="logout()" class="flex items-center px-3 py-2 bg-[#394867] text-white rounded-lg hover:bg-[#1a1333] transition font-semibold text-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/></svg>
+            Logout
+          </button>
+        </div>
+      </header>
+      <!-- Content Area -->
+      <section class="flex-1 p-8 overflow-auto">
+        <div class="max-w-4xl mx-auto">
+          <!-- Upload Form -->
+          <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Upload New Firmware</h2>
+            
+            <form id="uploadForm" class="space-y-6">
+              <!-- File Upload Area -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Firmware File</label>
+                <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#394867] transition-colors cursor-pointer">
+                  <div class="space-y-4">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <div>
+                      <p class="text-sm text-gray-600">Drag and drop your firmware file here, or</p>
+                      <button type="button" onclick="document.getElementById('fileInput').click()" class="text-[#394867] hover:text-[#2d1a5a] font-medium">
+                        browse files
+                      </button>
+                    </div>
+                    <p class="text-xs text-gray-500">Supported formats: .bin, .hex, .firmware, .txt</p>
+                  </div>
+                                     <input type="file" id="fileInput" class="hidden" accept=".bin,.hex,.firmware,.txt" aria-label="Select firmware file" />
+                </div>
+                <div id="fileInfo" class="mt-2 text-sm text-gray-600 hidden">
+                  <p id="fileName"></p>
+                  <p id="fileSize"></p>
+                </div>
+              </div>
+
+              <!-- Form Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="trainNumber" class="block text-sm font-medium text-gray-700 mb-2">Train Number</label>
+                  <input type="text" id="trainNumber" name="trainNumber" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#394867] focus:border-[#394867]" placeholder="Enter train number" />
+                </div>
+                <div>
+                  <label for="firmwareVersion" class="block text-sm font-medium text-gray-700 mb-2">Firmware Version</label>
+                  <input type="text" id="firmwareVersion" name="firmwareVersion" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#394867] focus:border-[#394867]" placeholder="e.g., v1.2.3" />
+                </div>
+              </div>
+
+              <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <textarea id="description" name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#394867] focus:border-[#394867]" placeholder="Enter description of the firmware update"></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="flex justify-end">
+                <button type="submit" id="submitBtn" class="px-6 py-2 bg-[#394867] text-white rounded-md hover:bg-[#2d1a5a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  <span id="submitText">Upload Firmware</span>
+                  <span id="submitSpinner" class="hidden">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Uploading...
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Upload Progress and Messages -->
+          <div id="uploadProgress" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="flex items-center">
+              <svg class="animate-spin h-5 w-5 text-blue-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <div>
+                <p class="text-blue-800 font-medium" id="progressText">Uploading firmware...</p>
+                <p class="text-blue-600 text-sm" id="progressDetails">Please wait while we process your file</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Success/Error Messages -->
+          <div id="messageContainer" class="hidden">
+            <div id="successMessage" class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md hidden">
+              <div class="flex items-start">
+                <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                  <p class="font-medium" id="successText"></p>
+                  <p class="text-sm text-green-700 mt-1" id="successDetails"></p>
+                </div>
+              </div>
+            </div>
+            <div id="errorMessage" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md hidden">
+              <div class="flex items-start">
+                <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                  <p class="font-medium" id="errorText"></p>
+                  <p class="text-sm text-red-700 mt-1" id="errorDetails"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+            </form>
+          </div>
+
+          <!-- Success/Error Messages -->
+          <div id="messageContainer" class="hidden">
+            <div id="successMessage" class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md hidden">
+              <div class="flex">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="successText"></span>
+              </div>
+            </div>
+            <div id="errorMessage" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md hidden">
+              <div class="flex">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="errorText"></span>
+              </div>
+            </div>
+          </div>
+                 </div>
+       </section>
+     </main>
+   </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3002/api';
+    let selectedFile = null;
+
+    // Check authentication on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAuth();
+      setupFileUpload();
+    });
+
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!token) {
+        // Fallback to simple auth for now
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+          window.location.href = 'index.html';
+          return;
+        }
+      }
+
+      // Update user info in header
+      if (user.name) {
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userInitials').textContent = user.name.charAt(0).toUpperCase();
+      }
+    }
+
+    function setupFileUpload() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+
+      // Drag and drop functionality
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-[#394867]', 'bg-blue-50');
+      });
+
+      dropZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-[#394867]', 'bg-blue-50');
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-[#394867]', 'bg-blue-50');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileSelect(files[0]);
+        }
+      });
+
+      // File input change
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+
+      // Form submission
+      document.getElementById('uploadForm').addEventListener('submit', handleFormSubmit);
+    }
+
+    function handleFileSelect(file) {
+      // Validate file type
+      const allowedTypes = ['.bin', '.hex', '.firmware', '.txt'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      
+              if (!allowedTypes.includes(fileExtension)) {
+          showError('Invalid file type', 'Please select a .bin, .hex, .firmware, or .txt file. The selected file type is not supported.');
+          return;
+        }
+
+      selectedFile = file;
+      
+      // Update UI
+      document.getElementById('fileName').textContent = `File: ${file.name}`;
+      document.getElementById('fileSize').textContent = `Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+      document.getElementById('fileInfo').classList.remove('hidden');
+      
+      // Update drop zone
+      document.getElementById('dropZone').innerHTML = `
+        <div class="text-center">
+          <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p class="mt-2 text-sm text-gray-600">${file.name}</p>
+          <p class="text-xs text-gray-500">Click to change file</p>
+        </div>
+      `;
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      
+              if (!selectedFile) {
+          showError('Please select a firmware file.', 'No file has been selected for upload.');
+          return;
+        }
+
+      const formData = new FormData();
+      formData.append('firmware', selectedFile);
+      formData.append('trainNumber', document.getElementById('trainNumber').value);
+      formData.append('firmwareVersion', document.getElementById('firmwareVersion').value);
+              formData.append('description', document.getElementById('description').value);
+
+        // Show upload progress
+        showUploadProgress('Uploading firmware...', 'Please wait while we process your file');
+
+        // Show loading state on button
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitSpinner = document.getElementById('submitSpinner');
+        
+        submitBtn.disabled = true;
+        submitText.classList.add('hidden');
+        submitSpinner.classList.remove('hidden');
+
+              try {
+          // For now, use simple authentication
+          const isLoggedIn = localStorage.getItem('isLoggedIn');
+          if (!isLoggedIn) {
+            showError('Authentication required', 'Please log in first to upload files.');
+            return;
+          }
+
+          // Update progress message
+          updateProgressMessage('Connecting to server...', 'Establishing connection to upload server');
+
+          const response = await fetch(`${API_BASE_URL}/upload-test`, {
+            method: 'POST',
+            body: formData
+          });
+
+        // Update progress message
+        updateProgressMessage('Processing upload...', 'Saving file and updating database');
+
+        const data = await response.json();
+
+        if (response.ok) {
+          hideUploadProgress();
+          showSuccess(
+            'Firmware uploaded successfully!', 
+            `File "${selectedFile.name}" has been uploaded and saved to the system. Train: ${document.getElementById('trainNumber').value}, Version: ${document.getElementById('firmwareVersion').value}`
+          );
+          
+          // Reset form
+          document.getElementById('uploadForm').reset();
+          selectedFile = null;
+          document.getElementById('fileInfo').classList.add('hidden');
+          document.getElementById('dropZone').innerHTML = `
+            <div class="space-y-4">
+              <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div>
+                <p class="text-sm text-gray-600">Drag and drop your firmware file here, or</p>
+                <button type="button" onclick="document.getElementById('fileInput').click()" class="text-[#394867] hover:text-[#2d1a5a] font-medium">
+                  browse files
+                </button>
+              </div>
+              <p class="text-xs text-gray-500">Supported formats: .bin, .hex, .firmware, .txt</p>
+            </div>
+            <input type="file" id="fileInput" class="hidden" accept=".bin,.hex,.firmware,.txt" />
+          `;
+        } else {
+          hideUploadProgress();
+          let errorMessage = 'Upload failed. Please try again.';
+          let errorDetails = 'The server encountered an error while processing your upload.';
+          
+          if (data.error) {
+            errorMessage = data.error;
+            if (data.error.includes('file')) {
+              errorDetails = 'Please check that your file is in the correct format (.bin, .hex, .firmware, or .txt) and try again.';
+            } else if (data.error.includes('size')) {
+              errorDetails = 'The file size may be too large. Please try with a smaller file.';
+            } else if (data.error.includes('network')) {
+              errorDetails = 'There was a network connectivity issue. Please check your internet connection.';
+            }
+          }
+          
+          showError(errorMessage, errorDetails);
+        }
+              } catch (error) {
+          console.error('Upload error:', error);
+          hideUploadProgress();
+          
+          let errorMessage = 'Network error. Please check your connection.';
+          let errorDetails = 'Unable to connect to the upload server.';
+          
+          if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            errorMessage = 'Connection failed';
+            errorDetails = 'Unable to reach the server. Please check if the backend server is running on port 3001.';
+          } else if (error.name === 'AbortError') {
+            errorMessage = 'Upload cancelled';
+            errorDetails = 'The upload was cancelled or timed out. Please try again.';
+          }
+          
+          showError(errorMessage, errorDetails);
+        } finally {
+        // Reset loading state
+        submitBtn.disabled = false;
+        submitText.classList.remove('hidden');
+        submitSpinner.classList.add('hidden');
+      }
+          }
+
+      function showUploadProgress(title, details) {
+        document.getElementById('uploadProgress').classList.remove('hidden');
+        document.getElementById('progressText').textContent = title;
+        document.getElementById('progressDetails').textContent = details;
+        document.getElementById('messageContainer').classList.add('hidden');
+      }
+
+      function updateProgressMessage(title, details) {
+        document.getElementById('progressText').textContent = title;
+        document.getElementById('progressDetails').textContent = details;
+      }
+
+      function hideUploadProgress() {
+        document.getElementById('uploadProgress').classList.add('hidden');
+      }
+
+      function showSuccess(message, details = '') {
+        hideUploadProgress();
+        document.getElementById('messageContainer').classList.remove('hidden');
+        document.getElementById('successText').textContent = message;
+        document.getElementById('successDetails').textContent = details;
+        document.getElementById('successMessage').classList.remove('hidden');
+        document.getElementById('errorMessage').classList.add('hidden');
+        
+        setTimeout(() => {
+          document.getElementById('messageContainer').classList.add('hidden');
+        }, 8000);
+      }
+
+      function showError(message, details = '') {
+        hideUploadProgress();
+        document.getElementById('messageContainer').classList.remove('hidden');
+        document.getElementById('errorText').textContent = message;
+        document.getElementById('errorDetails').textContent = details;
+        document.getElementById('errorMessage').classList.remove('hidden');
+        document.getElementById('successMessage').classList.add('hidden');
+        
+        setTimeout(() => {
+          document.getElementById('messageContainer').classList.add('hidden');
+        }, 8000);
+      }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userEmail');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html> 
