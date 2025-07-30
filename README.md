@@ -1,4 +1,5 @@
-# OTA-Platform
+# OTA Platform Backend
+
 A Node.js backend for the OTA (Over-The-Air) firmware update platform.
 
 ## Features
